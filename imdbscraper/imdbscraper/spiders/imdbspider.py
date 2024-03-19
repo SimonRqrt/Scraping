@@ -19,12 +19,18 @@ class ImdbspiderSpider(scrapy.Spider):
         
     def parse_movie(self, response):
         item = ImdbscraperItem()
-        item['title'] = response.xpath('.//h3[contains(@class,"title")]//text()')
-        item['directors'] = response.xpath('//div[@class="credit_summary_item"]/h4[contains(., "Director")]/following-sibling::a/text()').getall()
-        item['writers'] = response.xpath('//div[@class="credit_summary_item"]/h4[contains(., "Writers")]/following-sibling::a/text()').getall()
-        item['stars'] = response.xpath('//div[@class="credit_summary_item"]/h4[contains(., "Stars")]/following-sibling::a/text()').getall()
-        item['popularity'] = response.css(".titleReviewBarSubItem span.subText::text")[2].re('([0-9]+)')
-        item['rating'] = response.css(".ratingValue span::text").get()
+        item['title'] = response.xpath('.//span[@class="hero__primary-text"]/text()').get()
+        item['original_title'] = response.xpath('.//h1[@data-testid="hero__pageTitle"]/following-sibling::div/text()').get()
+        item['directors'] = response.xpath('.//div[@data-testid="shoveler"]/following-sibling::ul/li/div/ul/li/a/text()')[0].get()
+        item['writers'] = response.xpath('.//div[@data-testid="shoveler"]/following-sibling::ul/li/div/ul/li/a/text()')[1].getall()
+        item['stars'] = response.xpath('.//a[@data-testid="title-cast-item__actor"]/text()').getall()
+        item['popularity'] = response.xpath('.//div[@data-testid="hero-rating-bar__popularity__score"]/text()').get()
+        item['rating'] = response.xpath('.//div[@data-testid="hero-rating-bar__aggregate-rating__score"]/span/text()').get()
+        item['year'] = response.xpath('.//h1[@data-testid="hero__pageTitle"]/following-sibling::ul/li/a/text()').get()
+        item['duration'] = response.xpath('.//h1[@data-testid="hero__pageTitle"]/following-sibling::ul/li/text()').get()
+        item['synopsis'] = response.xpath('.//span[@data-testid="plot-xs_to_m"]/text()').get()
+        item['country'] = response.xpath('.//li[@data-testid="title-details-origin"]/div/ul/li/a/text()').get()
+        item['language'] = response.xpath('.//li[@data-testid="title-details-languages"]/div/ul/li/a/text()').getall()
         return item
 
 process = CrawlerProcess()
