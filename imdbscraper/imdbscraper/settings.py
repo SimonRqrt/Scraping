@@ -66,8 +66,6 @@ ITEM_PIPELINES = {
     "imdbscraper.pipelines.ImdbscraperPipeline": 300,
 }
 
-CSV_OUTPUT_PATH = 'output.csv'
-
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True
