@@ -15,3 +15,4 @@ class ImdbscraperItem(scrapy.Item):
     synopsis = scrapy.Field()
     country = scrapy.Field()
     language = scrapy.Field()
+    genre = scrapy.Field()

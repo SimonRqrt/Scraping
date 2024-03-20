@@ -1,10 +1,13 @@
 import scrapy
-from items import ImdbscraperItem
+from imdbscraper.items import ImdbscraperItem
 from scrapy.crawler import CrawlerProcess
+from scrapy.utils.reactor import install_reactor
 
+install_reactor("twisted.internet.asyncioreactor.AsyncioSelectorReactor")
 
 class ImdbspiderSpider(scrapy.Spider):
     name = "imdbspider"
+    custom_fields = ['title', 'original_title', 'directors', 'writers', 'stars', 'popularity', 'rating', 'year', 'duration', 'synopsis', 'country', 'language', 'genre']
     allowed_domains = ["imdb.com"]
     start_urls = ["https://www.imdb.com/chart/top"]
 
@@ -28,12 +31,13 @@ class ImdbspiderSpider(scrapy.Spider):
         item['rating'] = response.xpath('.//div[@data-testid="hero-rating-bar__aggregate-rating__score"]/span/text()').get()
         item['year'] = response.xpath('.//h1[@data-testid="hero__pageTitle"]/following-sibling::ul/li/a/text()').get()
         item['duration'] = response.xpath('.//h1[@data-testid="hero__pageTitle"]/following-sibling::ul/li/text()').get()
-        item['synopsis'] = response.xpath('.//span[@data-testid="plot-xs_to_m"]/text()').get()
+        item['synopsis'] = response.xpath('.//span[@data-testid="plot-xl"]/text()').get()
         item['country'] = response.xpath('.//li[@data-testid="title-details-origin"]/div/ul/li/a/text()').get()
         item['language'] = response.xpath('.//li[@data-testid="title-details-languages"]/div/ul/li/a/text()').getall()
+        item['genre'] = response.css('span.ipc-chip__text::text').getall()
         return item
 
-process = CrawlerProcess()
-process.crawl(ImdbspiderSpider)
-process.start()
+#process = CrawlerProcess()
+#process.crawl(ImdbspiderSpider)
+#process.start()
 

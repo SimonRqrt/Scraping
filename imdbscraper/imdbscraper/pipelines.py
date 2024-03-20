@@ -10,4 +10,5 @@ from itemadapter import ItemAdapter
 
 class ImdbscraperPipeline:
     def process_item(self, item, spider):
+        adapter = ItemAdapter(item)
         return item
