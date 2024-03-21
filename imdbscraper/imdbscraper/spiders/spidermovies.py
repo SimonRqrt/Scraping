@@ -21,7 +21,6 @@ class SpiderMoviesSpider(scrapy.Spider):
         
     def parse_movie(self, response):
         item = ImdbMovieScraperItem()
-        item['movie'] = self.name
         item['title'] = response.xpath('.//span[@class="hero__primary-text"]/text()').get()
         item['original_title'] = response.xpath('.//h1[@data-testid="hero__pageTitle"]/following-sibling::div/text()').get()
         item['directors'] = response.xpath('.//div[@data-testid="shoveler"]/following-sibling::ul/li/div/ul/li/a/text()')[0].get()
