@@ -5,9 +5,8 @@ from scrapy.utils.reactor import install_reactor
 
 install_reactor("twisted.internet.asyncioreactor.AsyncioSelectorReactor")
 
-class ImdbspiderSpider(scrapy.Spider):
-    name = "imdbspider"
-    custom_fields = ['title', 'original_title', 'directors', 'writers', 'stars', 'popularity', 'rating', 'year', 'duration', 'synopsis', 'country', 'language', 'genre']
+class SpiderMoviesSpider(scrapy.Spider):
+    name = "spidermovies"
     allowed_domains = ["imdb.com"]
     start_urls = ["https://www.imdb.com/chart/top"]
 
@@ -22,6 +21,7 @@ class ImdbspiderSpider(scrapy.Spider):
         
     def parse_movie(self, response):
         item = ImdbMovieScraperItem()
+        item['movie'] = self.name
         item['title'] = response.xpath('.//span[@class="hero__primary-text"]/text()').get()
         item['original_title'] = response.xpath('.//h1[@data-testid="hero__pageTitle"]/following-sibling::div/text()').get()
         item['directors'] = response.xpath('.//div[@data-testid="shoveler"]/following-sibling::ul/li/div/ul/li/a/text()')[0].get()
